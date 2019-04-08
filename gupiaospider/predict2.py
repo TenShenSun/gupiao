@@ -15,8 +15,7 @@ start = datetime.datetime(2015, 1, 1)
 end = datetime.datetime(2016, 11, 20)
 #从互联网获取数据
 #df = web.DataReader("XOM", "yahoo", start, end)
-
-path=os.path.abspath(os.path.join(os.getcwd(), "../"))+"JDFA.csv"
+path=os.path.abspath(os.path.join(os.getcwd(), "../"))+"\JDFA.csv"
 df = pd.read_csv(path,encoding='utf-8')
 #print(df)
 #print(df.head())
@@ -24,8 +23,9 @@ df = pd.read_csv(path,encoding='utf-8')
 
 df = df[['开盘价',  '最高价',  '最低价',  '收盘价', '成交量']]
 #print(df)
-
+# 日振幅
 df['HL_PCT'] = (df['最高价'] - df['最低价']) / df['收盘价'] * 100.0
+
 df['PCT_change'] = (df['收盘价'] - df['开盘价']) / df['开盘价'] * 100.0
 df = df[['收盘价', 'HL_PCT', 'PCT_change', '成交量']]
 #print(df.head())
@@ -62,9 +62,9 @@ X_train, X_test, y_train ,y_test = model_selection.train_test_split(X,y,test_siz
 clf = LinearRegression()
 clf.fit(X_train,y_train)
 accuracy = clf.score(X_test,y_test)
-# print("################LinearRegression#################")
-# print("精确度：")
-# print(accuracy)
+print("################LinearRegression#################")
+print("精确度：")
+print(accuracy)
 
 forecast_set = clf.predict(X_lately)
 
@@ -74,19 +74,21 @@ style.use('ggplot')
 
 df['Forecast']=np.nan
 
-# last_date = df.iloc[-1].name
+last_date = df.iloc[-1].name
 # last_unix = last_date.timestamp()
-# print(last_date,last_unix)
-# one_day = 86400
-# next_unix = last_unix + one_day
+last_unix = last_date
+print(last_date,last_unix)
+one_day = 86400
+next_unix = last_unix + one_day
 
-# for i in forecast_set:
-#     next_date = datetime.datetime.fromtimestamp(next_unix)
-#     next_unix += 86400
-#     df.loc[next_date] = [np.nan for _ in range(len(df.columns)-1)]+[i]
-#
-#
+for i in forecast_set:
+    next_date = datetime.datetime.fromtimestamp(next_unix)
+    next_unix += 86400
+    df.loc[next_date] = [np.nan for _ in range(len(df.columns)-1)]+[i]
+
+
 # print(df.tail())
+print(df)
 
 df['收盘价'].plot()
 df['Forecast'].plot()
@@ -94,16 +96,15 @@ plt.show()
 
 
 
-"""
-svm
+
+# svm
 for k in ['linear','poly','rbf','sigmoid']:
     clf2 = svm.SVR(k)
     clf2.fit(X_train,y_train)
     accuracy2 = clf2.score(X_test,y_test)    
     print(accuracy2)
-"""
-"""
-clf3 = svm.SVC(kernel='linear',C=1)
-scores = cross_val_score(clf3,X,y,cv=5,scoring='f1_macro')
-print(scores)
-"""
+
+
+# clf3 = svm.SVC(kernel='linear',C=1)
+# scores = cross_val_score(clf3,X,y,cv=5,scoring='f1_macro')
+# print("svm:",scores)
