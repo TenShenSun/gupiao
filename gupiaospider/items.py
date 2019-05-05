@@ -11,4 +11,6 @@ import scrapy
 class GupiaospiderItem(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
-    pass
+    file_urls = scrapy.Field()
+    file_name = scrapy.Field()
+    # files = scrapy.Field()

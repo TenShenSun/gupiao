@@ -4,6 +4,7 @@ import pandas as pd
 import numpy as np
 import datetime
 import os
+import sys
 import pandas_datareader as web
 import math
 import matplotlib.pyplot as plt
@@ -11,12 +12,14 @@ from matplotlib import style
 from sklearn.model_selection import cross_val_score
 from sklearn import preprocessing, model_selection, svm
 from sklearn.linear_model import LinearRegression
-start = datetime.datetime(2015, 1, 1)
-end = datetime.datetime(2016, 11, 20)
+#start = datetime.datetime(2015, 1, 1)
+#end = datetime.datetime(2016, 11, 20)
 #从互联网获取数据
 #df = web.DataReader("XOM", "yahoo", start, end)
-path=os.path.abspath(os.path.join(os.getcwd(), "../"))+"\JDFA.csv"
-df = pd.read_csv(path,encoding='utf-8')
+#print(sys.argv[0])
+
+path=os.path.abspath(os.path.join(os.getcwd(), "./"))+"/csv/000725.csv"
+df = pd.read_csv(path,encoding='gbk')
 #print(df)
 #print(df.head())
 #取这些列的数据
@@ -31,7 +34,6 @@ df = df[['收盘价', 'HL_PCT', 'PCT_change', '成交量']]
 #print(df.head())
 print(len(df))
 
-
 forecast_col = '收盘价'
 df.fillna(value=-99999, inplace=True)
 forecast_out = int(math.ceil(0.01 * len(df)))
@@ -44,10 +46,7 @@ print(df['label'])
 # print(df.shape)
 # print(df.tail())
 X = np.array(df.drop(['label'], 1))
-
-
 X = preprocessing.scale(X)
-
 X_lately = X[-forecast_out:]
 X = X[:-forecast_out]
 df.dropna(inplace=True)
@@ -73,19 +72,22 @@ print(forecast_set,accuracy,forecast_out)
 style.use('ggplot')
 
 df['Forecast']=np.nan
-
-last_date = df.iloc[-1].name
+print("++++++++++++++++++   df      ++++++++++++++++++++++")
+print(df)
+last_date = df.iloc[-2].name
 # last_unix = last_date.timestamp()
 last_unix = last_date
+print("###############################################")
 print(last_date,last_unix)
-one_day = 86400
-next_unix = last_unix + one_day
+#one_day = 86400
+#next_unix = last_unix + one_day
+next_unix = last_unix
 
 for i in forecast_set:
-    next_date = datetime.datetime.fromtimestamp(next_unix)
-    next_unix += 86400
+    #next_date = datetime.datetime.fromtimestamp(next_unix)
+    next_date = next_unix
+    next_unix += 1
     df.loc[next_date] = [np.nan for _ in range(len(df.columns)-1)]+[i]
-
 
 # print(df.tail())
 print(df)
@@ -94,16 +96,12 @@ df['收盘价'].plot()
 df['Forecast'].plot()
 plt.show()
 
-
-
-
 # svm
 for k in ['linear','poly','rbf','sigmoid']:
     clf2 = svm.SVR(k)
     clf2.fit(X_train,y_train)
     accuracy2 = clf2.score(X_test,y_test)    
     print(accuracy2)
-
 
 # clf3 = svm.SVC(kernel='linear',C=1)
 # scores = cross_val_score(clf3,X,y,cv=5,scoring='f1_macro')

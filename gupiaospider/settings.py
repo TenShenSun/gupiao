@@ -14,12 +14,14 @@ BOT_NAME = 'gupiaospider'
 SPIDER_MODULES = ['gupiaospider.spiders']
 NEWSPIDER_MODULE = 'gupiaospider.spiders'
 
+# 下载文件保存路径
+FILES_STORE = './csv'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-USER_AGENT = 'gupiaospider (+http://www.yourdomain.com)'
+# USER_AGENT = 'gupiaospider (+http://www.yourdomain.com)'
 
 # Obey robots.txt rules
-ROBOTSTXT_OBEY = False
+# ROBOTSTXT_OBEY = False
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32
@@ -39,10 +41,10 @@ ROBOTSTXT_OBEY = False
 #TELNETCONSOLE_ENABLED = False
 
 # Override the default request headers:
-DEFAULT_REQUEST_HEADERS = {
-  'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-#   'Accept-Language': 'en',
-}
+# DEFAULT_REQUEST_HEADERS = {
+#   'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+# #   'Accept-Language': 'en',
+# }
 
 # Enable or disable spider middlewares
 # See http://scrapy.readthedocs.org/en/latest/topics/spider-middleware.html
@@ -51,12 +53,13 @@ DEFAULT_REQUEST_HEADERS = {
 #}
 
 # Enable or disable downloader middlewares
-# See http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
+# See http://scrapy.readthFilesPipelineedocs.org/en/latest/topics/downloader-middleware.html
 
 # 修改DOWNLOADER_MIDDLEWARES
 DOWNLOADER_MIDDLEWARES = {
-   # 'gupiaospider.middlewares.MyCustomDownloaderMiddleware': 543,
-'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,
+    #'gupiaospider.middlewares.MyCustomDownloaderMiddleware': 543,
+    # 'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,
+    #'gupiaospider.middlewares.RandomUserAgentMiddleware': 543,
 }
 
 # Enable or disable extensions
@@ -67,9 +70,11 @@ DOWNLOADER_MIDDLEWARES = {
 
 # Configure item pipelines
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    'gupiaospider.pipelines.GupiaospiderPipeline': 300,
-#}
+ITEM_PIPELINES = {
+     'gupiaospider.pipelines.GupiaospiderPipeline': 300,
+    # 'scrapy.pipelines.files.FilesPipeline': 1,
+    #'gupiaospider.pipelines.FilespiderPipeline':300,
+}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See http://doc.scrapy.org/en/latest/topics/autothrottle.html
