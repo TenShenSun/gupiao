@@ -5,6 +5,7 @@ import scrapy
 import time
 import json
 import os
+import sys
 
 from gupiaospider.items import GupiaospiderItem
 from gupiaospider.spiders.gupiao import GupiaoSpider
@@ -31,9 +32,10 @@ class GupiaoSpider(scrapy.Spider):
     # end_data = input("终止日期")
     #url = "http://quotes.money.163.com/1"+code+".html";
 
-    code = '000725'
-    start_date = '20180417'
-    end_date = '20190417'
+    code = sys.argv[-1][5:]
+    start_date = sys.argv[-5][11:]
+    end_date = sys.argv[-3][9:]
+
     start_urls = [
         'http://quotes.money.163.com/service/chddata.html?code=1%s&start=%s&end=%s&fields=TCLOSE;HIGH;LOW;TOPEN;LCLOSE;CHG;PCHG;TURNOVER;VOTURNOVER;VATURNOVER;TCAP;MCAP' % (
         str(code), str(start_date), str(end_date))]
@@ -76,11 +78,11 @@ class GupiaoSpider(scrapy.Spider):
         # yield scrapy.Request(href_url, callback=self.parse_data)
 
     # 对每个股票的数据
-    def parse_data(self, response):
-        filename_location = r"D:\gupiao\full\11.csv"
-        output = open(filename_location, "wb")
-        print(response.content)
-        output.write(response.content)
-        output.close()
-        return None
+        # def parse_data(self, response):
+        #     filename_location = r"D:\gupiao\full\11.csv"
+        #     output = open(filename_location, "wb")
+        #     print(response.content)
+        #     output.write(response.content)
+        #     output.close()
+        #     return None
 

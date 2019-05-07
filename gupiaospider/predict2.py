@@ -16,9 +16,11 @@ from sklearn.linear_model import LinearRegression
 #end = datetime.datetime(2016, 11, 20)
 #从互联网获取数据
 #df = web.DataReader("XOM", "yahoo", start, end)
-#print(sys.argv[0])
 
-path=os.path.abspath(os.path.join(os.getcwd(), "./"))+"/csv/000725.csv"
+
+path=os.path.abspath(os.path.join(os.getcwd(), "./"))+"/csv/"+sys.argv[-1]+".csv"
+print("=========================================")
+print(path)
 df = pd.read_csv(path,encoding='gbk')
 #print(df)
 #print(df.head())
